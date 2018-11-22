@@ -1,21 +1,22 @@
-package com.hwyoung.concurrency.atomic;
+package com.hwyoung.concurrency.commonunsafe;
 
-import com.hwyoung.concurrency.annotation.ThreadSafe;
+import com.hwyoung.concurrency.annotation.UnThreadSafe;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.LongAdder;
 
 /**
- * 原子性：LongAdder并发测试类
+ * 线程不安全类：HashSet类
  *
  */
-@ThreadSafe
 @Slf4j
-public class LongAdderConcurrency {
+@UnThreadSafe
+public class UnSafeHashSet {
 
 	/**
 	 * 请求总数
@@ -28,19 +29,20 @@ public class LongAdderConcurrency {
 	private static int threadTotal = 200;
 
 	/**
-	 * 计数
+	 * set
 	 */
-	private static LongAdder count = new LongAdder();
+	private static Set<Integer> set = new HashSet<>();
 
 	public static void main(String[] args) throws Exception{
 		ExecutorService executorService = Executors.newCachedThreadPool();
 		final Semaphore semaphore = new Semaphore(threadTotal);
 		final CountDownLatch countDownLatch = new CountDownLatch(clientTotal);
 		for (int i = 0; i < clientTotal; i++){
+			final int count = i;
 			executorService.execute(() -> {
 				try {
 					semaphore.acquire();
-					add();
+					update(count);
 					semaphore.release();
 				} catch (InterruptedException e) {
 					log.error("exception:",e);
@@ -50,10 +52,10 @@ public class LongAdderConcurrency {
 		}
 		countDownLatch.await();
 		executorService.shutdown();
-		log.info("count:{}",count);
+		log.info("size:{}",set.size());
 	}
 
-	private static void add(){
-		count.increment();
+	private static void update(int i){
+		set.add(i);
 	}
 }

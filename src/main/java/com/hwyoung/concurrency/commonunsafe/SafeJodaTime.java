@@ -1,21 +1,28 @@
-package com.hwyoung.concurrency.atomic;
+package com.hwyoung.concurrency.commonunsafe;
+
 
 import com.hwyoung.concurrency.annotation.ThreadSafe;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.LongAdder;
+
+//线程安全的datetimeformat
 
 /**
- * 原子性：LongAdder并发测试类
- *
+ * 线程安全类：Joda-time中的DateTime类
  */
-@ThreadSafe
 @Slf4j
-public class LongAdderConcurrency {
+@ThreadSafe
+public class SafeJodaTime {
+
+	//joda.time包下的，线程安全
+	private static DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyyMMdd");
 
 	/**
 	 * 请求总数
@@ -27,11 +34,6 @@ public class LongAdderConcurrency {
 	 */
 	private static int threadTotal = 200;
 
-	/**
-	 * 计数
-	 */
-	private static LongAdder count = new LongAdder();
-
 	public static void main(String[] args) throws Exception{
 		ExecutorService executorService = Executors.newCachedThreadPool();
 		final Semaphore semaphore = new Semaphore(threadTotal);
@@ -40,7 +42,7 @@ public class LongAdderConcurrency {
 			executorService.execute(() -> {
 				try {
 					semaphore.acquire();
-					add();
+					update();
 					semaphore.release();
 				} catch (InterruptedException e) {
 					log.error("exception:",e);
@@ -50,10 +52,13 @@ public class LongAdderConcurrency {
 		}
 		countDownLatch.await();
 		executorService.shutdown();
-		log.info("count:{}",count);
 	}
 
-	private static void add(){
-		count.increment();
+	private static void update(){
+		try {
+			DateTime.parse("20180421",dateTimeFormatter).toDate()  ;
+		} catch (Exception e) {
+			log.error("parse exception",e);
+		}
 	}
 }

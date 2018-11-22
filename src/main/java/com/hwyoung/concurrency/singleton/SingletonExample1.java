@@ -1,7 +1,7 @@
 package com.hwyoung.concurrency.singleton;
 
 import com.hwyoung.concurrency.annotation.UnRecommend;
-import com.hwyoung.concurrency.annotation.UnTreadSafe;
+import com.hwyoung.concurrency.annotation.UnThreadSafe;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
  * 懒汉模式:单例实例在第一次使用时创建
  * 多线程环境下线程不安全：（线安需要syn同步）
  */
-@UnTreadSafe
+@UnThreadSafe
 @UnRecommend
 @Slf4j
 public class SingletonExample1 {

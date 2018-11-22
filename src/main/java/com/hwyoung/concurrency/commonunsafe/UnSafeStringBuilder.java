@@ -1,21 +1,19 @@
-package com.hwyoung.concurrency.atomic;
+package com.hwyoung.concurrency.commonunsafe;
 
-import com.hwyoung.concurrency.annotation.ThreadSafe;
+import com.hwyoung.concurrency.annotation.UnThreadSafe;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.LongAdder;
 
 /**
- * 原子性：LongAdder并发测试类
- *
+ * 线程不安全类：StringBuilder类事例
  */
-@ThreadSafe
 @Slf4j
-public class LongAdderConcurrency {
+@UnThreadSafe
+public class UnSafeStringBuilder {
 
 	/**
 	 * 请求总数
@@ -28,9 +26,9 @@ public class LongAdderConcurrency {
 	private static int threadTotal = 200;
 
 	/**
-	 * 计数
+	 * 拼接StringBuilder
 	 */
-	private static LongAdder count = new LongAdder();
+	private static StringBuilder stringBuilder = new StringBuilder();
 
 	public static void main(String[] args) throws Exception{
 		ExecutorService executorService = Executors.newCachedThreadPool();
@@ -40,7 +38,7 @@ public class LongAdderConcurrency {
 			executorService.execute(() -> {
 				try {
 					semaphore.acquire();
-					add();
+					update();
 					semaphore.release();
 				} catch (InterruptedException e) {
 					log.error("exception:",e);
@@ -50,10 +48,10 @@ public class LongAdderConcurrency {
 		}
 		countDownLatch.await();
 		executorService.shutdown();
-		log.info("count:{}",count);
+		log.info("size:{}",stringBuilder.length());
 	}
 
-	private static void add(){
-		count.increment();
+	private static void update(){
+		stringBuilder.append("1");
 	}
 }

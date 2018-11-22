@@ -1,6 +1,6 @@
 package com.hwyoung.concurrency.test;
 
-import com.hwyoung.concurrency.annotation.UnTreadSafe;
+import com.hwyoung.concurrency.annotation.UnThreadSafe;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.*;
@@ -10,7 +10,7 @@ import java.util.concurrent.*;
  *  5000个线程给count加1
  *  结论：不做任何线程安全操作，计数远小于5000
  */
-@UnTreadSafe
+@UnThreadSafe
 @Slf4j
 public class ConcurrencyTest {
 

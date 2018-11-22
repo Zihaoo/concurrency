@@ -12,8 +12,6 @@ import java.util.concurrent.Semaphore;
 /**
  * 原子性：AtomicInteger并发测试类
  *
- * @author ronglexie
- * @version 2018/4/11
  */
 @ThreadSafe
 @Slf4j

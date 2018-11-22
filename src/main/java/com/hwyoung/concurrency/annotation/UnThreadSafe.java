@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
-public @interface UnTreadSafe {
+public @interface UnThreadSafe {
 
     String value() default "";
 }
